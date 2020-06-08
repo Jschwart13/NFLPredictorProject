@@ -4,17 +4,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.Test;
-import sun.tools.java.SyntaxError;
-
 import javax.swing.*;
-import java.awt.*;
-import java.io.IOException;
-import java.sql.*;
 import java.util.*;
 import java.util.List;
-
-import static com.sun.tools.internal.xjc.reader.Ring.add;
-import static java.lang.Thread.sleep;
 
 public class getAllTheScores {
 
@@ -23,15 +15,13 @@ public class getAllTheScores {
 
         System.setProperty("webdriver.chrome.driver", "chromedriver");
         ChromeDriver driver;
-        driver = new ChromeDriver();
+
+        ConnectToDB ctb = new ConnectToDB();
+        List listOfNFLTeams = ctb.getListOfNFLTeams();
 
         JTextField pickAYear = new JTextField();
         JTextField pickAWeek = new JTextField();
-        JComboBox pickATeam = new JComboBox();
-        pickATeam.addItem("New York Giants");
-        pickATeam.addItem("Houston Texans");
-
-        //TODO -> ^ create list of nfl teams so i have to add list.
+        JComboBox pickATeam = new JComboBox(listOfNFLTeams.toArray());
 
         Object[] message = {
                 "year (example: 2007):", pickAYear,
@@ -52,11 +42,12 @@ public class getAllTheScores {
         HashMap<String, String> teamScores = new HashMap<String, String>();
         HashMap<String, String> awayOpponent = new HashMap<String, String>();
         HashMap<String, String> homeOpponent = new HashMap<String, String>();
-        
+
+        driver = new ChromeDriver();
+
         for (int weekNumber = whatWeek; weekNumber < whatWeek+1; weekNumber++) {
 
             driver.navigate().to("https://www.pro-football-reference.com/years/" + whatYear +"/week_" + weekNumber + ".htm");
-
             System.out.println("Scores for week " + weekNumber + " of the " + whatYear + "-" + season + " season:\n");
 
             List<WebElement> numberOfGamesPlayed = driver.findElements(By.cssSelector("#content > div.game_summaries > div"));
@@ -77,7 +68,6 @@ public class getAllTheScores {
                 teamScores.put(homeTeam.getText(), homeScore.getText());
                 awayOpponent.put(awayTeam.getText(), homeTeam.getText());
                 homeOpponent.put(homeTeam.getText(), awayTeam.getText());
-
             }
         }
 
