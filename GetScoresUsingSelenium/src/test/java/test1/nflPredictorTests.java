@@ -11,8 +11,8 @@ public class nflPredictorTests {
     @Test
     public void selectYourTeams() throws Exception {
 
-        NFLPredictor ctb = new NFLPredictor();
-        List listOfNFLTeams = ctb.pickYourTeam();
+        NFLPredictor nflPredictor = new NFLPredictor();
+        List listOfNFLTeams = nflPredictor.pickYourTeam();
         JComboBox pickATeam = new JComboBox(listOfNFLTeams.toArray());
         Object[] message = {
                 "team", pickATeam,
@@ -21,7 +21,7 @@ public class nflPredictorTests {
 
         String whatTeam = pickATeam.getSelectedItem().toString();
 
-        List listOfOpponents = ctb.OpponentsGivenTeam(whatTeam);
+        List listOfOpponents = nflPredictor.OpponentsGivenTeam(whatTeam);
 
         for (int i=0; i<17; i++) {
             if (listOfOpponents.get(i).toString().equals("BYE")) {

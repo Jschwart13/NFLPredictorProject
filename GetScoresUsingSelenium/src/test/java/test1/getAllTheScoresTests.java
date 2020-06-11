@@ -8,7 +8,7 @@ import javax.swing.*;
 import java.util.*;
 import java.util.List;
 
-public class getAllTheScores {
+public class getAllTheScoresTests {
 
     @Test
     public void getAllTheScoresAndPrintThemOut() throws Exception {
@@ -16,8 +16,8 @@ public class getAllTheScores {
         System.setProperty("webdriver.chrome.driver", "chromedriver");
         ChromeDriver driver;
 
-        NFLPredictor nflPredictor = new NFLPredictor();
-        List listOfNFLTeams = nflPredictor.getListOfNFLTeams();
+        GetAllTheScores getAllTheScores = new GetAllTheScores();
+        List listOfNFLTeams = getAllTheScores.getListOfNFLTeams();
 
         JTextField pickAYear = new JTextField();
         JTextField pickAWeek = new JTextField();
