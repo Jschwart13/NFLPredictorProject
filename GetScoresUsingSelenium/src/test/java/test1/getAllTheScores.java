@@ -16,8 +16,8 @@ public class getAllTheScores {
         System.setProperty("webdriver.chrome.driver", "chromedriver");
         ChromeDriver driver;
 
-        ConnectToDB ctb = new ConnectToDB();
-        List listOfNFLTeams = ctb.getListOfNFLTeams();
+        NFLPredictor nflPredictor = new NFLPredictor();
+        List listOfNFLTeams = nflPredictor.getListOfNFLTeams();
 
         JTextField pickAYear = new JTextField();
         JTextField pickAWeek = new JTextField();
@@ -37,8 +37,6 @@ public class getAllTheScores {
         String whatTeam = pickATeam.getSelectedItem().toString();
         int season = (whatYear + 1);
 
-        ArrayList<String> Teams = new ArrayList<String>();
-        ArrayList<String> Scores = new ArrayList<String>();
         HashMap<String, String> teamScores = new HashMap<String, String>();
         HashMap<String, String> awayOpponent = new HashMap<String, String>();
         HashMap<String, String> homeOpponent = new HashMap<String, String>();
@@ -56,13 +54,9 @@ public class getAllTheScores {
             for (int gameNumber = 1; gameNumber < numberOfGames + 1; gameNumber++) {
                 WebElement awayTeam = driver.findElement(By.xpath("//*[@id=\"content\"]/div[4]/div[" + gameNumber + "]/table[1]/tbody/tr[2]/td[1]/a"));
                 WebElement awayScore = driver.findElement(By.xpath("//*[@id=\"content\"]/div[4]/div[" + gameNumber + "]/table[1]/tbody/tr[2]/td[2]"));
-                Teams.add(awayTeam.getText());
-                Scores.add(awayScore.getText());
 
                 WebElement homeTeam = driver.findElement(By.xpath("//*[@id=\"content\"]/div[4]/div[" + gameNumber + "]/table[1]/tbody/tr[3]/td[1]/a"));
                 WebElement homeScore = driver.findElement(By.xpath("//*[@id=\"content\"]/div[4]/div[" + gameNumber + "]/table[1]/tbody/tr[3]/td[2]"));
-                Teams.add(homeTeam.getText());
-                Scores.add(homeScore.getText());
 
                 teamScores.put(awayTeam.getText(), awayScore.getText());
                 teamScores.put(homeTeam.getText(), homeScore.getText());
