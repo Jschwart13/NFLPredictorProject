@@ -13,8 +13,6 @@ public class nflPredictorTests {
 
         NFLPredictor ctb = new NFLPredictor();
         List listOfNFLTeams = ctb.pickYourTeam();
-        List listOfOpponents = ctb.OpponentsGivenTeam("Arizona Cardinals");
-
         JComboBox pickATeam = new JComboBox(listOfNFLTeams.toArray());
         Object[] message = {
                 "team", pickATeam,
@@ -22,6 +20,8 @@ public class nflPredictorTests {
         JOptionPane.showConfirmDialog(null, message, "inputs", JOptionPane.OK_CANCEL_OPTION);
 
         String whatTeam = pickATeam.getSelectedItem().toString();
+
+        List listOfOpponents = ctb.OpponentsGivenTeam(whatTeam);
 
         for (int i=0; i<17; i++) {
             if (listOfOpponents.get(i).toString().equals("BYE")) {
