@@ -24,10 +24,13 @@ public class nflPredictorTests {
         List listOfOpponents = nflPredictor.getOpponentGivenTeamName(whatTeam);
 
         for (int i=0; i<17; i++) {
+            int weekNumber = i+1;
             if (listOfOpponents.get(i).toString().equals("BYE")) {
                 int byeWeek = i + 1;
                 JOptionPane.showMessageDialog(null, whatTeam + " have a bye on week " + byeWeek);
+                NFLPredictor.insertWinOrLossIntoDatabaseGivenTeamAndWeek(weekNumber,44,44, whatTeam, null);
             }else{
+                String opponentTeamName = listOfOpponents.get(i).toString().substring(2);
                 Object[] options1 = {
                         "Lose :(", "WIN!!!!!!!!!"
                 };
@@ -37,40 +40,31 @@ public class nflPredictorTests {
                 panel.add(new JLabel(whatTeam));
                 panel.add(new JLabel("          score :"));
                 JTextField teamScoreInput = new JTextField(2);
-                teamScoreInput.setText("get text from db");
-                //TODO get score if already in DB ^
+                teamScoreInput.setText(Integer.toString(NFLPredictor.getPreviousPredictedScoreForTeam(weekNumber, whatTeam)));
                 panel.add(teamScoreInput);
                 panel.add(new JLabel(listOfOpponents.get(i).toString()));
-                JTextField opponentScoreInput = new JTextField(2);
                 panel.add(new JLabel("          score:"));
-                opponentScoreInput.setText("get text from db op");
-                //TODO get score if already in DB ^
+                JTextField opponentScoreInput = new JTextField(2);
+                opponentScoreInput.setText(Integer.toString(NFLPredictor.getPreviousOpponentPredictedScoreForTeam(weekNumber, whatTeam)));
                 panel.add(opponentScoreInput);
 
-                int result = JOptionPane.showOptionDialog(null, panel, "Pick Your Winner",
+                int result = JOptionPane.showOptionDialog(null, panel, whatTeam + " Week " + weekNumber,
                         JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE,
                         null, options1, null);
-
-                String opponentTeamName = listOfOpponents.get(i).toString().substring(2);
 
                 String teamScorePredictionString = teamScoreInput.getText();
                 int teamScorePrediction = Integer.parseInt(teamScorePredictionString);
                 String opponentScorePredictionString = opponentScoreInput.getText();
                 int opponentScorePrediction = Integer.parseInt(opponentScorePredictionString);
-//                System.out.println(teamScorePrediction);
-//                // TODO store your team score in DB
-//                System.out.println(opponentScorePrediction);
-//                // TODO store your opponent team score in DB
 
-                NFLPredictor.insertScoreIntoDatabaseGivenTeamAndWeek(i, teamScorePrediction, opponentScorePrediction, whatTeam, opponentTeamName);
+                // store your scores in the DB
+                NFLPredictor.insertScoreIntoDatabaseGivenTeamAndWeek(weekNumber, teamScorePrediction, opponentScorePrediction, whatTeam, opponentTeamName);
 
-                //no = win, yes = lose
+                // no = win, yes = lose
                 if (result == JOptionPane.NO_OPTION){
-                    System.out.println("yay win");
-                    // TODO enter into DB
+                    NFLPredictor.insertWinOrLossIntoDatabaseGivenTeamAndWeek(weekNumber,1,0, whatTeam, opponentTeamName);
                 }else if (result == JOptionPane.YES_OPTION){
-                    System.out.println("boo lose");
-                    // TODO enter into DB
+                    NFLPredictor.insertWinOrLossIntoDatabaseGivenTeamAndWeek(weekNumber,0,1, whatTeam, opponentTeamName);
                 }
             }
         }
