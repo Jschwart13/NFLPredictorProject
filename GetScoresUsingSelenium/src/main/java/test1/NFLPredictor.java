@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 public class NFLPredictor {
 
@@ -16,7 +17,7 @@ public class NFLPredictor {
     static final String USER = "root";
     static final String PASS = "my-secret-pw";
 
-    public static ArrayList getListOfTeamsFromSchedule() throws Exception {
+    public static ArrayList getListOfTeamsFromNFL() throws Exception {
         ArrayList<String> list = new ArrayList<String>();
 
         // Register JDBC driver
@@ -28,7 +29,34 @@ public class NFLPredictor {
         // Execute a query
         Statement stmt = conn.createStatement();
 
-        ResultSet rs = stmt.executeQuery("SELECT teamName FROM TestNFL.nflSchedule ORDER BY teamName ASC");
+        ResultSet rs = stmt.executeQuery("SELECT teamName FROM TestNFL.listOfTeamsBrokenUp ORDER BY teamName ASC");
+
+        // Extract data from result set
+        while(rs.next()){
+            String teamName = rs.getString("teamName");
+            list.add(teamName);
+        }
+        // Clean-up environment
+        rs.close();
+        stmt.close();
+        conn.close();
+
+        return list;
+    }
+
+    public static ArrayList getListOfTeamsFromSection(String divisionOrConference) throws Exception {
+        ArrayList<String> list = new ArrayList<String>();
+
+        // Register JDBC driver
+        Class.forName("com.mysql.jdbc.Driver");
+
+        // Open a connection
+        Connection conn = DriverManager.getConnection(DB_URL,USER,PASS);
+
+        // Execute a query
+        Statement stmt = conn.createStatement();
+
+        ResultSet rs = stmt.executeQuery("SELECT teamName FROM TestNFL.listOfTeamsBrokenUp WHERE " + divisionOrConference + " = 1 ORDER BY teamName ASC");
 
         // Extract data from result set
         while(rs.next()){
@@ -107,6 +135,7 @@ public class NFLPredictor {
         int score = rs.getInt("predictedScore");
 
         // Clean-up environment
+        rs.close();
         updateYourTeam.close();
         conn.close();
 
@@ -129,6 +158,7 @@ public class NFLPredictor {
         int score = rs.getInt("predictedOpponentScore");
 
         // Clean-up environment
+        rs.close();
         updateYourTeam.close();
         conn.close();
 
@@ -175,5 +205,27 @@ public class NFLPredictor {
         updateYourTeam.close();
         updateOpponentTeam.close();
         conn.close();
+    }
+
+    public static int getCountOfWinsOrLosses(String team, int winOrLoss) throws Exception {
+        // Register JDBC driver
+        Class.forName("com.mysql.jdbc.Driver");
+
+        // Open a connection
+        Connection conn = DriverManager.getConnection(DB_URL,USER,PASS);
+
+        // Execute a query
+        Statement updateYourTeam = conn.createStatement();
+        ResultSet rs = updateYourTeam.executeQuery("SELECT count(*) from TestNFL.results WHERE teamName = '" + team + "' and predictedResult = " + winOrLoss);
+
+        rs.next();
+        int count = rs.getInt("count(*)");
+
+        // Clean-up environment
+        rs.close();
+        updateYourTeam.close();
+        conn.close();
+
+        return count;
     }
 }
