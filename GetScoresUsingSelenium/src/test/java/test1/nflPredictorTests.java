@@ -84,49 +84,123 @@ public class nflPredictorTests {
     @Test
     public void seeYourPredictedRecords() throws Exception {
 
-        List<Integer> predictedWinsInListNFL = new ArrayList<Integer>();
-        int predictedWinsNFL;
-        List<Integer> predictedLossesInListNFL = new ArrayList<Integer>();
-        int predictedLossesNFL;
-
-        List predictedWinsInListNFC = new ArrayList();
-        int predictedWinsNFC;
-        List predictedLossesInListNFC = new ArrayList();
-        int predictedLossesNFC;
-
-        List predictedWinsInListAFC = new ArrayList();
-        int predictedWinsAFC;
-        List predictedLossesInListAFC = new ArrayList();
-        int predictedLossesAFC;
-
-
-        List listOfNFLTeams = NFLPredictor.getListOfTeamsFromNFL();
-        List listOfNFCTeams = NFLPredictor.getListOfTeamsFromSection("nfc");
-        List listOfAFCTeams = NFLPredictor.getListOfTeamsFromSection("afc");
-        List listOfNFCEastTeams = NFLPredictor.getListOfTeamsFromSection("nfcEast");
-        List listOfNFCWestTeams = NFLPredictor.getListOfTeamsFromSection("nfcWest");
-        List listOfNFCNorthTeams = NFLPredictor.getListOfTeamsFromSection("nfcNorth");
-        List listOfNFCSouthTeams = NFLPredictor.getListOfTeamsFromSection("nfcSouth");
-        List listOfAFCEastTeams = NFLPredictor.getListOfTeamsFromSection("afcEast");
-        List listOfAFCWestTeams = NFLPredictor.getListOfTeamsFromSection("afcWest");
-        List listOfAFCNorthTeams = NFLPredictor.getListOfTeamsFromSection("afcNorth");
-        List listOfAFCSouthTeams = NFLPredictor.getListOfTeamsFromSection("afcSouth");
-
         JTabbedPane tabbedPane = new JTabbedPane();
 
         // nfl
+        JTable nflTable = predictedRecord("nfl", 32);
+
+        tabbedPane.addTab("NFL", null, new JScrollPane(nflTable),
+                "Does nothing");
+        tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
+
+        // nfc
+        JTable nfcTable = predictedRecord("nfc", 16);
+
+        tabbedPane.addTab("NFC", null, new JScrollPane(nfcTable),
+                "Does nothing");
+        tabbedPane.setMnemonicAt(1, KeyEvent.VK_1);
+
+        // afc
+        JTable afcTable = predictedRecord("afc", 16);
+
+        tabbedPane.addTab("AFC", null, new JScrollPane(afcTable),
+                "Does nothing");
+        tabbedPane.setMnemonicAt(2, KeyEvent.VK_1);
+
+        // nfcNorth
+        JTable nfcNorthTable = predictedRecord("nfcNorth", 4);
+
+        tabbedPane.addTab("NFC North", null, new JScrollPane(nfcNorthTable),
+                "Does nothing");
+        tabbedPane.setMnemonicAt(3, KeyEvent.VK_1);
+
+        // nfcEast
+        JTable nfcEastTable = predictedRecord("nfcEast", 4);
+
+        tabbedPane.addTab("NFC East", null, new JScrollPane(nfcEastTable),
+                "Does nothing");
+        tabbedPane.setMnemonicAt(4, KeyEvent.VK_1);
+
+        // nfcSouth
+        JTable nfcSouthTable = predictedRecord("nfcSouth", 4);
+
+        tabbedPane.addTab("NFC South", null, new JScrollPane(nfcSouthTable),
+                "Does nothing");
+        tabbedPane.setMnemonicAt(5, KeyEvent.VK_1);
+
+        // nfcWest
+        JTable nfcWestTable = predictedRecord("nfcWest", 4);
+
+        tabbedPane.addTab("NFC West", null, new JScrollPane(nfcWestTable),
+                "Does nothing");
+        tabbedPane.setMnemonicAt(6, KeyEvent.VK_1);
+
+        // afcNorth
+        JTable afcNorthTable = predictedRecord("afcNorth", 4);
+
+        tabbedPane.addTab("AFC North", null, new JScrollPane(afcNorthTable),
+                "Does nothing");
+        tabbedPane.setMnemonicAt(7, KeyEvent.VK_1);
+
+        // afcEast
+        JTable afcEastTable = predictedRecord("afcEast", 4);
+
+        tabbedPane.addTab("AFC East", null, new JScrollPane(afcEastTable),
+                "Does nothing");
+        tabbedPane.setMnemonicAt(8, KeyEvent.VK_1);
+
+        // afcSouth
+        JTable afcSouthTable = predictedRecord("afcSouth", 4);
+
+        tabbedPane.addTab("AFC South", null, new JScrollPane(afcSouthTable),
+                "Does nothing");
+        tabbedPane.setMnemonicAt(9, KeyEvent.VK_1);
+
+        // afcWest
+        JTable afcWestTable = predictedRecord("afcWest", 4);
+
+        tabbedPane.addTab("AFC West", null, new JScrollPane(afcWestTable),
+                "Does nothing");
+        tabbedPane.setMnemonicAt(10, KeyEvent.VK_1);
+
+        // ok button
+        Object[] option = {
+                "Congrats You Have Predicted These Outcomes"
+        };
+
+        JOptionPane.showOptionDialog(null, tabbedPane, "Predicted Wins & Losses",
+                JOptionPane.OK_OPTION, JOptionPane.PLAIN_MESSAGE,
+                null, option, null);
+    }
+
+    public JTable predictedRecord(String section, int numberOfTeams) throws Exception{
+
+
+        List predictedWinsInList = new ArrayList();
+        int predictedWins;
+        List predictedLossesInList = new ArrayList();
+        int predictedLosses;
+
+        List listOfTeams;
+
+        if (section.equals("nfl")){
+            listOfTeams = NFLPredictor.getListOfTeamsFromNFL();
+        }else {
+            listOfTeams = NFLPredictor.getListOfTeamsFromSection(section);
+        }
+
         Object[][] rowData = {};
         String[] columnNames = {"Team", "Wins","Losses"};
 
         DefaultTableModel tabModel;
         tabModel = new DefaultTableModel(rowData, columnNames);
 
-        for (int i = 0; i < 32; i++) {
-            predictedWinsNFL = NFLPredictor.getCountOfWinsOrLosses(listOfNFLTeams.get(i).toString(), 1);
-            predictedWinsInListNFL.add(predictedWinsNFL);
-            predictedLossesNFL = NFLPredictor.getCountOfWinsOrLosses(listOfNFLTeams.get(i).toString(), 0);
-            predictedLossesInListNFL.add(predictedLossesNFL);
-            tabModel.addRow(new Object[]{listOfNFLTeams.get(i).toString(), predictedWinsInListNFL.get(i), predictedLossesInListNFL.get(i)});
+        for (int i = 0; i < numberOfTeams; i++) {
+            predictedWins = NFLPredictor.getCountOfWinsOrLosses(listOfTeams.get(i).toString(), 1);
+            predictedWinsInList.add(predictedWins);
+            predictedLosses = NFLPredictor.getCountOfWinsOrLosses(listOfTeams.get(i).toString(), 0);
+            predictedLossesInList.add(predictedLosses);
+            tabModel.addRow(new Object[]{listOfTeams.get(i).toString(), predictedWinsInList.get(i), predictedLossesInList.get(i)});
         }
 
 
@@ -137,57 +211,7 @@ public class nflPredictorTests {
         columnModel.getColumn(1).setPreferredWidth(20);
         columnModel.getColumn(2).setPreferredWidth(20);
 
-
-        tabbedPane.addTab("NFL", null, new JScrollPane(table),
-                "Does nothing");
-        tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
-
-//        // nfc
-//        JPanel nfcPanel = new JPanel();
-//        nfcPanel.setBorder(border);
-//        nfcPanel.setLayout(new GridLayout(16, 4));
-//        for (int i=0; i<16; i++) {
-//            predictedWinsNFC = NFLPredictor.getCountOfWinsOrLosses(listOfNFCTeams.get(i).toString(), 1);
-//            predictedWinsInListNFC.add(predictedWinsNFC);
-//            predictedLossesNFC = NFLPredictor.getCountOfWinsOrLosses(listOfNFCTeams.get(i).toString(), 0);
-//            predictedLossesInListNFC.add(predictedLossesNFC);
-//
-//            nfcPanel.add(new JLabel(listOfNFCTeams.get(i).toString()));
-//            nfcPanel.add(new JLabel(""));
-//            nfcPanel.add(new JLabel(predictedWinsInListNFC.get(i).toString()));
-//            nfcPanel.add(new JLabel(predictedLossesInListNFC.get(i).toString()));
-//        }
-//        tabbedPane.addTab("NFC", null, nfcPanel,
-//                "Does nothing");
-//        tabbedPane.setMnemonicAt(1, KeyEvent.VK_1);
-//
-//        // afc
-//        JPanel afcPanel = new JPanel();
-//        afcPanel.setBorder(border);
-//        afcPanel.setLayout(new GridLayout(16, 4));
-//        for (int i=0; i<16; i++) {
-//            predictedWinsAFC = NFLPredictor.getCountOfWinsOrLosses(listOfAFCTeams.get(i).toString(), 1);
-//            predictedWinsInListAFC.add(predictedWinsAFC);
-//            predictedLossesAFC = NFLPredictor.getCountOfWinsOrLosses(listOfAFCTeams.get(i).toString(), 0);
-//            predictedLossesInListAFC.add(predictedLossesAFC);
-//
-//            afcPanel.add(new JLabel(listOfAFCTeams.get(i).toString()));
-//            afcPanel.add(new JLabel(""));
-//            afcPanel.add(new JLabel(predictedWinsInListAFC.get(i).toString()));
-//            afcPanel.add(new JLabel(predictedLossesInListAFC.get(i).toString()));
-//        }
-//        tabbedPane.addTab("AFC", null, afcPanel,
-//                "Does nothing");
-//        tabbedPane.setMnemonicAt(2, KeyEvent.VK_1);
-
-        // ok button
-        Object[] option = {
-                "Congrats You Have Predicted These Outcomes"
-        };
-
-        int result = JOptionPane.showOptionDialog(null, tabbedPane, "Predicted Wins & Losses",
-                JOptionPane.OK_OPTION, JOptionPane.PLAIN_MESSAGE,
-                null, option, null);
+        return table;
     }
 }
 
