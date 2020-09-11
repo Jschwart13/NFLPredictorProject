@@ -2,11 +2,14 @@ package test1;
 
 import org.testng.annotations.Test;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.net.URL;
 import java.util.*;
 import java.util.List;
 
@@ -15,8 +18,8 @@ public class nflPredictorTests {
     @Test
     public void selectYourTeams() throws Exception {
 
-        List listOfNFLTeams = NFLPredictor.getListOfTeamsFromNFL();
-        JComboBox pickATeam = new JComboBox(listOfNFLTeams.toArray());
+        List listOfNFLTeamsIHaventPickedYet = NFLPredictor.getListOfTeamsIHaventPickedYet();
+        JComboBox pickATeam = new JComboBox(listOfNFLTeamsIHaventPickedYet.toArray());
 
         Object[] message = {
                 "team", pickATeam,
@@ -67,12 +70,11 @@ public class nflPredictorTests {
                 NFLPredictor.insertScoreIntoDatabaseGivenTeamAndWeek(weekNumber, teamScorePrediction, opponentScorePrediction, whatTeam, opponentTeamName);
 
                 // no = win, yes = lose
-                if (result == JOptionPane.NO_OPTION){
-                    NFLPredictor.insertWinOrLossIntoDatabaseGivenTeamAndWeek(weekNumber,0,1, whatTeam, opponentTeamName);
-                    System.out.println("lose");
-                }else if (result == JOptionPane.YES_OPTION){
-                    NFLPredictor.insertWinOrLossIntoDatabaseGivenTeamAndWeek(weekNumber,1,0, whatTeam, opponentTeamName);
-                }else if (result == JOptionPane.CANCEL_OPTION){
+                if (result == JOptionPane.NO_OPTION) {
+                    NFLPredictor.insertWinOrLossIntoDatabaseGivenTeamAndWeek(weekNumber, 0, 1, whatTeam, opponentTeamName);
+                } else if (result == JOptionPane.YES_OPTION) {
+                    NFLPredictor.insertWinOrLossIntoDatabaseGivenTeamAndWeek(weekNumber, 1, 0, whatTeam, opponentTeamName);
+                } else if (result == JOptionPane.CANCEL_OPTION) {
                     System.exit(0);
                 }
             }
@@ -86,82 +88,100 @@ public class nflPredictorTests {
 
         JTabbedPane tabbedPane = new JTabbedPane();
 
+        // images:
+        String nfl = "https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/National_Football_League_logo.svg/1280px-National_Football_League_logo.svg.png";
+        String nfc = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/National_Football_Conference_logo.svg/2560px-National_Football_Conference_logo.svg.png";
+        String afc = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/American_Football_Conference_logo.svg/2560px-American_Football_Conference_logo.svg.png";
+
         // nfl
         JTable nflTable = predictedRecord("nfl", 32);
 
         tabbedPane.addTab("NFL", null, new JScrollPane(nflTable),
-                "Does nothing");
+                "NFL");
         tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
+        BufferedImage img = ImageIO.read(new URL(nfl));
+        ImageIcon icon = new ImageIcon(img);
+        tabbedPane.setIconAt(0, icon);
 
         // nfc
         JTable nfcTable = predictedRecord("nfc", 16);
 
         tabbedPane.addTab("NFC", null, new JScrollPane(nfcTable),
-                "Does nothing");
+                "NFC");
         tabbedPane.setMnemonicAt(1, KeyEvent.VK_1);
+        img = ImageIO.read(new URL(nfc));
+        icon = new ImageIcon(img);
+        tabbedPane.setIconAt(1, icon);
 
         // afc
         JTable afcTable = predictedRecord("afc", 16);
 
         tabbedPane.addTab("AFC", null, new JScrollPane(afcTable),
-                "Does nothing");
+                "AFC");
         tabbedPane.setMnemonicAt(2, KeyEvent.VK_1);
+        img = ImageIO.read(new URL(afc));
+        icon = new ImageIcon(img);
+        tabbedPane.setIconAt(2, icon);
 
         // nfcNorth
         JTable nfcNorthTable = predictedRecord("nfcNorth", 4);
 
         tabbedPane.addTab("NFC North", null, new JScrollPane(nfcNorthTable),
-                "Does nothing");
+                "NFC North");
         tabbedPane.setMnemonicAt(3, KeyEvent.VK_1);
 
         // nfcEast
         JTable nfcEastTable = predictedRecord("nfcEast", 4);
 
         tabbedPane.addTab("NFC East", null, new JScrollPane(nfcEastTable),
-                "Does nothing");
+                "NFC East");
         tabbedPane.setMnemonicAt(4, KeyEvent.VK_1);
 
         // nfcSouth
         JTable nfcSouthTable = predictedRecord("nfcSouth", 4);
 
         tabbedPane.addTab("NFC South", null, new JScrollPane(nfcSouthTable),
-                "Does nothing");
+                "NFC South");
         tabbedPane.setMnemonicAt(5, KeyEvent.VK_1);
 
         // nfcWest
         JTable nfcWestTable = predictedRecord("nfcWest", 4);
 
         tabbedPane.addTab("NFC West", null, new JScrollPane(nfcWestTable),
-                "Does nothing");
+                "NFC West");
         tabbedPane.setMnemonicAt(6, KeyEvent.VK_1);
 
         // afcNorth
         JTable afcNorthTable = predictedRecord("afcNorth", 4);
 
         tabbedPane.addTab("AFC North", null, new JScrollPane(afcNorthTable),
-                "Does nothing");
+                "AFC North");
         tabbedPane.setMnemonicAt(7, KeyEvent.VK_1);
 
         // afcEast
         JTable afcEastTable = predictedRecord("afcEast", 4);
 
         tabbedPane.addTab("AFC East", null, new JScrollPane(afcEastTable),
-                "Does nothing");
+                "AFC East");
         tabbedPane.setMnemonicAt(8, KeyEvent.VK_1);
 
         // afcSouth
         JTable afcSouthTable = predictedRecord("afcSouth", 4);
 
         tabbedPane.addTab("AFC South", null, new JScrollPane(afcSouthTable),
-                "Does nothing");
+                "AFC South");
         tabbedPane.setMnemonicAt(9, KeyEvent.VK_1);
 
         // afcWest
         JTable afcWestTable = predictedRecord("afcWest", 4);
 
         tabbedPane.addTab("AFC West", null, new JScrollPane(afcWestTable),
-                "Does nothing");
+                "AFC West");
         tabbedPane.setMnemonicAt(10, KeyEvent.VK_1);
+
+        tabbedPane.setBackgroundAt(0, Color.GRAY);
+        tabbedPane.setBackgroundAt(1, Color.BLUE);
+        tabbedPane.setBackgroundAt(2, Color.RED);
 
         // ok button
         Object[] option = {

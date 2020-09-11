@@ -44,6 +44,33 @@ public class NFLPredictor {
         return list;
     }
 
+    public static ArrayList getListOfTeamsIHaventPickedYet() throws Exception {
+        ArrayList<String> list = new ArrayList<String>();
+
+        // Register JDBC driver
+        Class.forName("com.mysql.jdbc.Driver");
+
+        // Open a connection
+        Connection conn = DriverManager.getConnection(DB_URL,USER,PASS);
+
+        // Execute a query
+        Statement stmt = conn.createStatement();
+
+        ResultSet rs = stmt.executeQuery("SELECT DISTINCT teamName FROM TestNFL.results where predictedResult is NULL ORDER BY teamName ASC");
+
+        // Extract data from result set
+        while(rs.next()){
+            String teamName = rs.getString("teamName");
+            list.add(teamName);
+        }
+        // Clean-up environment
+        rs.close();
+        stmt.close();
+        conn.close();
+
+        return list;
+    }
+
     public static ArrayList getListOfTeamsFromSection(String divisionOrConference) throws Exception {
         ArrayList<String> list = new ArrayList<String>();
 
